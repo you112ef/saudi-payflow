@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseServer } from '@/lib/supabase/server'
 import { generateUUID, generateOrderId } from '@/lib/utils/uuid'
+import { serverStorage } from '@/lib/storage'
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,37 +16,27 @@ export async function POST(request: NextRequest) {
 
     const uuid = generateUUID()
     const finalOrderId = order_id || generateOrderId(provider)
-    const paymentLink = `${request.nextUrl.origin}/payment/${provider}/${uuid}/details`
+    const paymentLink = `${request.nextUrl.origin}/pay/${uuid}`
 
-    const { data, error } = await supabaseServer
-      .from('payments')
-      .insert([
-        {
-          id: uuid,
-          provider,
-          amount,
-          currency,
-          customer_name,
-          customer_email,
-          customer_phone,
-          customer_address,
-          order_id: finalOrderId,
-          payment_link: paymentLink,
-          status: 'pending'
-        }
-      ])
-      .select()
-      .single()
-
-    if (error) {
-      console.error('Supabase error:', error)
-      return NextResponse.json(
-        { error: 'Failed to create payment' },
-        { status: 500 }
-      )
+    const payment = {
+      id: uuid,
+      provider,
+      amount: parseFloat(amount),
+      currency,
+      status: 'pending' as const,
+      customer_name,
+      customer_email,
+      customer_phone,
+      customer_address,
+      order_id: finalOrderId,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      payment_url: paymentLink
     }
 
-    return NextResponse.json({ success: true, data })
+    serverStorage.setPayment(payment)
+
+    return NextResponse.json({ success: true, data: payment })
   } catch (error) {
     console.error('API error:', error)
     return NextResponse.json(
@@ -63,34 +53,28 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status')
     const search = searchParams.get('search')
 
-    let query = supabaseServer
-      .from('payments')
-      .select('*')
-      .order('created_at', { ascending: false })
+    let payments = serverStorage.getAllPayments()
 
     if (provider) {
-      query = query.eq('provider', provider)
+      payments = payments.filter(p => p.provider === provider)
     }
 
     if (status) {
-      query = query.eq('status', status)
+      payments = payments.filter(p => p.status === status)
     }
 
     if (search) {
-      query = query.or(`customer_name.ilike.%${search}%,customer_email.ilike.%${search}%,order_id.ilike.%${search}%`)
-    }
-
-    const { data, error } = await query
-
-    if (error) {
-      console.error('Supabase error:', error)
-      return NextResponse.json(
-        { error: 'Failed to fetch payments' },
-        { status: 500 }
+      payments = payments.filter(p =>
+        (p.customer_name && p.customer_name.includes(search)) ||
+        (p.customer_email && p.customer_email.includes(search)) ||
+        (p.order_id && p.order_id.includes(search))
       )
     }
 
-    return NextResponse.json({ success: true, data })
+    // Sort by created_at desc
+    payments.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+    return NextResponse.json({ success: true, data: payments })
   } catch (error) {
     console.error('API error:', error)
     return NextResponse.json(

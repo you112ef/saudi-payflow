@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseServer } from '@/lib/supabase/server'
+import { serverStorage } from '@/lib/storage'
 
 export async function GET(
   request: NextRequest,
@@ -7,22 +7,16 @@ export async function GET(
 ) {
   try {
     const { uuid } = params
+    const payment = serverStorage.getPayment(uuid)
 
-    const { data, error } = await supabaseServer
-      .from('payments')
-      .select('*')
-      .eq('id', uuid)
-      .single()
-
-    if (error) {
-      console.error('Supabase error:', error)
+    if (!payment) {
       return NextResponse.json(
         { error: 'Payment not found' },
         { status: 404 }
       )
     }
 
-    return NextResponse.json({ success: true, data })
+    return NextResponse.json({ success: true, data: payment })
   } catch (error) {
     console.error('API error:', error)
     return NextResponse.json(
@@ -40,22 +34,16 @@ export async function PUT(
     const { uuid } = params
     const body = await request.json()
 
-    const { data, error } = await supabaseServer
-      .from('payments')
-      .update(body)
-      .eq('id', uuid)
-      .select()
-      .single()
+    const updated = serverStorage.updatePayment(uuid, body)
 
-    if (error) {
-      console.error('Supabase error:', error)
+    if (!updated) {
       return NextResponse.json(
-        { error: 'Failed to update payment' },
-        { status: 500 }
+        { error: 'Payment not found' },
+        { status: 404 }
       )
     }
 
-    return NextResponse.json({ success: true, data })
+    return NextResponse.json({ success: true, data: updated })
   } catch (error) {
     console.error('API error:', error)
     return NextResponse.json(

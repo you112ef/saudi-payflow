@@ -4,51 +4,48 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Payment, PaymentProvider, PaymentStatus } from '@/types/payment'
-import { Search, Filter, CreditCard, CheckCircle, XCircle, Clock, DollarSign } from 'lucide-react'
-import { format } from 'date-fns'
-import { ar } from 'date-fns/locale'
+import { clientStorage } from '@/lib/storage'
+import { Search, Filter, CreditCard, CheckCircle, XCircle, Clock, DollarSign, Link as LinkIcon, Copy } from 'lucide-react'
 
 export default function AdminPage() {
-  const [payments, setPayments] = useState<Payment[]>([])
+  const [payments, setPayments] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [providerFilter, setProviderFilter] = useState<PaymentProvider | 'all'>('all')
-  const [statusFilter, setStatusFilter] = useState<PaymentStatus | 'all'>('all')
+  const [providerFilter, setProviderFilter] = useState<'tamara' | 'tabby' | 'all'>('all')
+  const [statusFilter, setStatusFilter] = useState<'pending' | 'completed' | 'cancelled' | 'all'>('all')
+  const [copied, setCopied] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchPayments()
+    // Load from localStorage
+    const allPayments = clientStorage.getPayments()
+    setPayments(allPayments)
+    setLoading(false)
   }, [])
 
-  const fetchPayments = async () => {
-    try {
-      const params = new URLSearchParams()
-      if (providerFilter !== 'all') params.append('provider', providerFilter)
-      if (statusFilter !== 'all') params.append('status', statusFilter)
-      if (searchTerm) params.append('search', searchTerm)
-
-      const response = await fetch(`/api/payments?${params}`)
-      const data = await response.json()
-
-      if (data.success) {
-        setPayments(data.data)
-      }
-    } catch (error) {
-      console.error('Error fetching payments:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchPayments()
-    }, 300)
+    // Filter payments
+    let filtered = clientStorage.getPayments()
 
-    return () => clearTimeout(timer)
+    if (providerFilter !== 'all') {
+      filtered = filtered.filter(p => p.provider === providerFilter)
+    }
+
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(p => p.status === statusFilter)
+    }
+
+    if (searchTerm) {
+      filtered = filtered.filter(p =>
+        (p.customer_name && p.customer_name.includes(searchTerm)) ||
+        (p.customer_email && p.customer_email.includes(searchTerm)) ||
+        (p.order_id && p.order_id.includes(searchTerm))
+      )
+    }
+
+    setPayments(filtered)
   }, [searchTerm, providerFilter, statusFilter])
 
-  const getStatusIcon = (status: PaymentStatus) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
         return <CheckCircle className="w-5 h-5 text-green-600" />
@@ -61,7 +58,7 @@ export default function AdminPage() {
     }
   }
 
-  const getStatusText = (status: PaymentStatus) => {
+  const getStatusText = (status: string) => {
     switch (status) {
       case 'completed':
         return 'مكتمل'
@@ -76,7 +73,7 @@ export default function AdminPage() {
     }
   }
 
-  const getProviderBadge = (provider: PaymentProvider) => {
+  const getProviderBadge = (provider: string) => {
     return (
       <span
         className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -90,7 +87,11 @@ export default function AdminPage() {
     )
   }
 
-  const filteredPayments = payments
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text)
+    setCopied(id)
+    setTimeout(() => setCopied(null), 2000)
+  }
 
   if (loading) {
     return (
@@ -113,7 +114,7 @@ export default function AdminPage() {
           className="mb-8"
         >
           <h1 className="text-4xl font-bold text-gray-900 mb-2">لوحة الإدارة</h1>
-          <p className="text-gray-600">مراجعة وإدارة جميع عمليات الدفع</p>
+          <p className="text-gray-600">إدارة روابط الدفع المنفصلة</p>
         </motion.div>
 
         <motion.div
@@ -142,7 +143,7 @@ export default function AdminPage() {
 
                 <select
                   value={providerFilter}
-                  onChange={(e) => setProviderFilter(e.target.value as PaymentProvider | 'all')}
+                  onChange={(e) => setProviderFilter(e.target.value as any)}
                   className="h-9 px-3 rounded-md border border-input bg-transparent"
                 >
                   <option value="all">جميع المزودين</option>
@@ -152,14 +153,12 @@ export default function AdminPage() {
 
                 <select
                   value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as PaymentStatus | 'all')}
+                  onChange={(e) => setStatusFilter(e.target.value as any)}
                   className="h-9 px-3 rounded-md border border-input bg-transparent"
                 >
                   <option value="all">جميع الحالات</option>
                   <option value="pending">معلق</option>
-                  <option value="processing">قيد المعالجة</option>
                   <option value="completed">مكتمل</option>
-                  <option value="failed">فاشل</option>
                   <option value="cancelled">ملغي</option>
                 </select>
               </div>
@@ -171,10 +170,10 @@ export default function AdminPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">إجمالي المعاملات</p>
+                    <p className="text-sm text-gray-600">إجمالي الروابط</p>
                     <p className="text-2xl font-bold">{payments.length}</p>
                   </div>
-                  <CreditCard className="w-10 h-10 text-blue-600" />
+                  <LinkIcon className="w-10 h-10 text-blue-600" />
                 </div>
               </CardContent>
             </Card>
@@ -183,15 +182,12 @@ export default function AdminPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">المبالغ المحصلة</p>
+                    <p className="text-sm text-gray-600">المعاملات المكتملة</p>
                     <p className="text-2xl font-bold">
-                      {payments
-                        .filter(p => p.status === 'completed')
-                        .reduce((sum, p) => sum + p.amount, 0)
-                        .toFixed(2)} ر.س
+                      {payments.filter(p => p.status === 'completed').length}
                     </p>
                   </div>
-                  <DollarSign className="w-10 h-10 text-green-600" />
+                  <CheckCircle className="w-10 h-10 text-green-600" />
                 </div>
               </CardContent>
             </Card>
@@ -210,7 +206,7 @@ export default function AdminPage() {
                       %
                     </p>
                   </div>
-                  <CheckCircle className="w-10 h-10 text-purple-600" />
+                  <DollarSign className="w-10 h-10 text-purple-600" />
                 </div>
               </CardContent>
             </Card>
@@ -218,17 +214,17 @@ export default function AdminPage() {
 
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle>قائمة المعاملات</CardTitle>
+              <CardTitle>قائمة روابط الدفع</CardTitle>
             </CardHeader>
             <CardContent>
-              {filteredPayments.length === 0 ? (
+              {payments.length === 0 ? (
                 <div className="text-center py-12">
-                  <CreditCard className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">لا توجد معاملات</p>
+                  <LinkIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500">لا توجد روابط دفع</p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {filteredPayments.map((payment) => (
+                  {payments.map((payment) => (
                     <motion.div
                       key={payment.id}
                       initial={{ opacity: 0, y: 10 }}
@@ -236,7 +232,7 @@ export default function AdminPage() {
                       transition={{ duration: 0.3 }}
                       className="border rounded-lg p-4 hover:shadow-md transition-shadow"
                     >
-                      <div className="flex items-center justify-between flex-wrap gap-4">
+                      <div className="flex items-start justify-between flex-wrap gap-4">
                         <div className="flex-1 min-w-[200px]">
                           <div className="flex items-center gap-2 mb-2">
                             {getProviderBadge(payment.provider)}
@@ -247,6 +243,7 @@ export default function AdminPage() {
                           </div>
                           <h3 className="font-semibold text-lg">{payment.customer_name || 'غير محدد'}</h3>
                           <p className="text-sm text-gray-600">{payment.customer_email || 'لا يوجد بريد'}</p>
+                          <p className="text-sm text-gray-500 mt-1">رقم الطلب: {payment.order_id}</p>
                         </div>
 
                         <div className="text-left">
@@ -254,13 +251,35 @@ export default function AdminPage() {
                             {payment.amount.toFixed(2)} {payment.currency}
                           </p>
                           <p className="text-sm text-gray-500">
-                            {format(new Date(payment.created_at), 'PPp', { locale: ar })}
+                            {new Date(payment.created_at).toLocaleString('ar-SA')}
                           </p>
                         </div>
 
-                        <div className="text-right">
-                          <p className="text-sm text-gray-600">رقم الطلب</p>
-                          <p className="font-mono text-sm">{payment.order_id || payment.id.substring(0, 8)}</p>
+                        <div className="w-full md:w-auto md:min-w-[300px]">
+                          <div className="bg-gray-50 rounded p-2 mb-2">
+                            <div className="flex items-center gap-2">
+                              <LinkIcon className="w-4 h-4 text-gray-600" />
+                              <p className="text-xs text-gray-600 font-mono break-all">
+                                {payment.payment_url}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => copyToClipboard(payment.payment_url, payment.id)}
+                            className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800"
+                          >
+                            {copied === payment.id ? (
+                              <>
+                                <CheckCircle className="w-3 h-3" />
+                                <span>تم النسخ!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3 h-3" />
+                                <span>نسخ الرابط</span>
+                              </>
+                            )}
+                          </button>
                         </div>
                       </div>
                     </motion.div>

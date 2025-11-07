@@ -135,15 +135,43 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <Card className="h-full shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center pb-4">
-                <div className="mx-auto w-24 h-24 bg-tamara-gradient rounded-full flex items-center justify-center mb-4 shadow-lg">
-                  <div className="text-3xl font-bold text-white font-tamara">تمارا</div>
+            <Card className="h-full shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-tamara/5 to-tamara-light/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <CardHeader className="text-center pb-4 relative">
+                <div className="mx-auto w-32 h-32 bg-tamara-gradient rounded-2xl flex items-center justify-center mb-4 shadow-2xl transform group-hover:scale-110 transition-transform duration-500 relative overflow-hidden">
+                  {/* Animated background pattern */}
+                  <div className="absolute inset-0 opacity-20">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <pattern id="tamara-pattern" width="20" height="20" patternUnits="userSpaceOnUse">
+                          <circle cx="10" cy="10" r="2" fill="white"/>
+                        </pattern>
+                      </defs>
+                      <rect width="100%" height="100%" fill="url(#tamara-pattern)" />
+                    </svg>
+                  </div>
+                  <div className="text-4xl font-bold text-white font-tamara relative z-10">تمارا</div>
                 </div>
-                <CardTitle className="font-tamara">دفع مع تمارا</CardTitle>
-                <CardDescription className="font-arabic">
+                <CardTitle className="font-tamara text-2xl text-tamara-dark">دفع مع تمارا</CardTitle>
+                <CardDescription className="font-arabic text-gray-600">
                   ادفع لاحقاً أو بأقساط مريحة
                 </CardDescription>
+
+                {/* Features */}
+                <div className="mt-4 space-y-2">
+                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                    <svg className="w-4 h-4 text-tamara" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-arabic">تقسيط حتى 12 شهر</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                    <svg className="w-4 h-4 text-tamara" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-arabic">بدون فوائد</span>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
                 <ProviderButton
@@ -162,15 +190,44 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <Card className="h-full shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader className="text-center pb-4">
-                <div className="mx-auto w-24 h-24 bg-tabby-green rounded-full flex items-center justify-center mb-4 shadow-tabby">
-                  <div className="text-3xl font-bold text-tabby-dark font-tabby">تابي</div>
+            <Card className="h-full shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-tabby/5 to-tabby-light/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <CardHeader className="text-center pb-4 relative">
+                <div className="mx-auto w-32 h-32 bg-tabby-green rounded-full flex items-center justify-center mb-4 shadow-tabby transform group-hover:scale-110 transition-transform duration-500 relative overflow-hidden">
+                  {/* Animated background pattern */}
+                  <div className="absolute inset-0 opacity-20">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <pattern id="tabby-pattern" width="15" height="15" patternUnits="userSpaceOnUse">
+                          <rect x="0" y="0" width="15" height="15" fill="none"/>
+                          <circle cx="7.5" cy="7.5" r="2" fill="white"/>
+                        </pattern>
+                      </defs>
+                      <rect width="100%" height="100%" fill="url(#tabby-pattern)" />
+                    </svg>
+                  </div>
+                  <div className="text-4xl font-bold text-tabby-dark font-tabby relative z-10">تابي</div>
                 </div>
-                <CardTitle className="font-tabby">دفع مع تابي</CardTitle>
-                <CardDescription className="font-arabic">
+                <CardTitle className="font-tabby text-2xl text-tabby-dark">دفع مع تابي</CardTitle>
+                <CardDescription className="font-arabic text-gray-600">
                   اشتري الآن وادفع لاحقاً
                 </CardDescription>
+
+                {/* Features */}
+                <div className="mt-4 space-y-2">
+                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                    <svg className="w-4 h-4 text-tabby-green" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-arabic">دفع سريع وآمن</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                    <svg className="w-4 h-4 text-tabby-green" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-arabic">موافقة فورية</span>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
                 <ProviderButton

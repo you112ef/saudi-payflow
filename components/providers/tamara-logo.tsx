@@ -11,19 +11,28 @@ export default function TamaraLogo() {
       className="flex items-center gap-2"
     >
       <svg
-        width="120"
-        height="40"
-        viewBox="0 0 120 40"
+        width="130"
+        height="44"
+        viewBox="0 0 130 44"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <rect width="120" height="40" rx="8" fill="#00b496" />
+        {/* Real Tamara Gradient */}
+        <defs>
+          <linearGradient id="tamara-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#370A56" />
+            <stop offset="29%" stopColor="#7121AF" />
+            <stop offset="59.79%" stopColor="#8B00EF" />
+            <stop offset="96.99%" stopColor="#F933A1" />
+          </linearGradient>
+        </defs>
+        <rect width="130" height="44" rx="8" fill="url(#tamara-gradient)" />
         <text
-          x="60"
-          y="25"
-          fontFamily="Arial, sans-serif"
-          fontSize="18"
-          fontWeight="bold"
+          x="65"
+          y="28"
+          fontFamily="'IBM Plex Sans', 'Ibmplexsansarabic', 'Open Sans', sans-serif"
+          fontSize="20"
+          fontWeight="600"
           fill="white"
           textAnchor="middle"
         >

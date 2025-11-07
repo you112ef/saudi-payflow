@@ -11,20 +11,23 @@ export default function TabbyLogo() {
       className="flex items-center gap-2"
     >
       <svg
-        width="120"
-        height="40"
-        viewBox="0 0 120 40"
+        width="130"
+        height="44"
+        viewBox="0 0 130 44"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <rect width="120" height="40" rx="8" fill="#6f4df5" />
+        {/* Real Tabby Green Background */}
+        <rect width="130" height="44" rx="24" fill="#3BFF9D" />
+
+        {/* Tabby Text */}
         <text
-          x="60"
-          y="25"
-          fontFamily="Arial, sans-serif"
-          fontSize="18"
-          fontWeight="bold"
-          fill="white"
+          x="65"
+          y="28"
+          fontFamily="'IBM Plex Mono', 'IBM Plex Sans Arabic', 'Inter', sans-serif"
+          fontSize="20"
+          fontWeight="600"
+          fill="#131C26"
           textAnchor="middle"
         >
           تابي

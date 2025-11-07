@@ -80,18 +80,18 @@ export default function Home() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4 font-tamara">
             SaudiPayFlow
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 font-arabic">
             إنشاء روابط دفع منفصلة لتمارا وتابي
           </p>
         </motion.div>
 
         <Card className="mb-8 shadow-xl">
           <CardHeader>
-            <CardTitle className="text-2xl">إنشاء رابط دفع جديد</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-2xl font-tamara">إنشاء رابط دفع جديد</CardTitle>
+            <CardDescription className="font-arabic">
               املأ بيانات المنتج لإنشاء رابط دفع قابل للمشاركة
             </CardDescription>
           </CardHeader>
@@ -137,11 +137,11 @@ export default function Home() {
           >
             <Card className="h-full shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader className="text-center pb-4">
-                <div className="mx-auto w-24 h-24 bg-tamara/10 rounded-full flex items-center justify-center mb-4">
-                  <div className="text-3xl font-bold text-tamara">تمارا</div>
+                <div className="mx-auto w-24 h-24 bg-tamara-gradient rounded-full flex items-center justify-center mb-4 shadow-lg">
+                  <div className="text-3xl font-bold text-white font-tamara">تمارا</div>
                 </div>
-                <CardTitle>دفع مع تمارا</CardTitle>
-                <CardDescription>
+                <CardTitle className="font-tamara">دفع مع تمارا</CardTitle>
+                <CardDescription className="font-arabic">
                   ادفع لاحقاً أو بأقساط مريحة
                 </CardDescription>
               </CardHeader>
@@ -164,11 +164,11 @@ export default function Home() {
           >
             <Card className="h-full shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader className="text-center pb-4">
-                <div className="mx-auto w-24 h-24 bg-tabby/10 rounded-full flex items-center justify-center mb-4">
-                  <div className="text-3xl font-bold text-tabby">تابي</div>
+                <div className="mx-auto w-24 h-24 bg-tabby-green rounded-full flex items-center justify-center mb-4 shadow-tabby">
+                  <div className="text-3xl font-bold text-tabby-dark font-tabby">تابي</div>
                 </div>
-                <CardTitle>دفع مع تابي</CardTitle>
-                <CardDescription>
+                <CardTitle className="font-tabby">دفع مع تابي</CardTitle>
+                <CardDescription className="font-arabic">
                   اشتري الآن وادفع لاحقاً
                 </CardDescription>
               </CardHeader>

@@ -107,7 +107,7 @@ export default function PaymentLinkPage() {
 
   if (step === 'success') {
     return (
-      <div className={`min-h-screen bg-gradient-to-br ${design === 'dark' ? 'from-gray-900 to-green-900' : design === 'minimal' ? 'from-green-50 to-green-100' : 'from-green-50 to-green-100'} flex items-center justify-center py-8 px-4`}>
+      <div className={`min-h-screen bg-gradient-to-br ${design === 'dark' ? 'from-gray-900 to-green-900' : design === 'minimal' ? 'from-green-50 to-green-100' : 'from-green-50 to-green-100'} flex items-center justify-center py-6 sm:py-8 px-3 sm:px-4`}>
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -119,23 +119,23 @@ export default function PaymentLinkPage() {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <div className="w-32 h-32 mx-auto mb-6 relative">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-4 sm:mb-6 relative">
               {design === 'dark' ? (
                 <>
                   <div className={`absolute inset-0 ${isTamara ? 'from-purple-600 to-pink-600' : 'from-green-400 to-green-600'} rounded-full opacity-30 animate-pulse`}></div>
                   <div className={`relative w-full h-full ${isTamara ? 'from-purple-600 to-pink-600' : 'from-green-400 to-green-600'} rounded-full flex items-center justify-center shadow-2xl`}>
-                    <CheckCircle2 className="w-16 h-16 text-white" />
+                    <CheckCircle2 className="w-12 h-12 sm:w-16 sm:h-16 text-white" />
                   </div>
                 </>
               ) : design === 'minimal' ? (
-                <div className="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-                  <CheckCircle2 className={`w-20 h-20 ${isTamara ? 'text-tamara' : 'text-tabby-green'}`} />
+                <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 sm:mb-6 flex items-center justify-center">
+                  <CheckCircle2 className={`w-16 h-16 sm:w-20 sm:h-20 ${isTamara ? 'text-tamara' : 'text-tabby-green'}`} />
                 </div>
               ) : (
                 <>
                   <div className={`absolute inset-0 ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-green'} rounded-full opacity-20 animate-ping`}></div>
                   <div className={`relative w-full h-full ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-green'} rounded-full flex items-center justify-center shadow-2xl`}>
-                    <CheckCircle2 className="w-16 h-16 text-white" />
+                    <CheckCircle2 className="w-12 h-12 sm:w-16 sm:h-16 text-white" />
                   </div>
                 </>
               )}
@@ -145,7 +145,7 @@ export default function PaymentLinkPage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className={`text-4xl font-bold mb-2 ${theme.text} font-${isTamara ? 'tamara' : 'tabby'}`}
+            className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 ${theme.text} font-${isTamara ? 'tamara' : 'tabby'}`}
           >
             تم الدفع بنجاح! 🎉
           </motion.h1>
@@ -153,7 +153,7 @@ export default function PaymentLinkPage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className={`text-lg ${design === 'dark' ? 'text-gray-300' : 'text-gray-600'} mb-6 font-arabic`}
+            className={`text-sm sm:text-base ${design === 'dark' ? 'text-gray-300' : 'text-gray-600'} mb-4 sm:mb-6 font-arabic`}
           >
             شكراً لك على ثقتك
           </motion.p>
@@ -161,11 +161,11 @@ export default function PaymentLinkPage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className={`${design === 'dark' ? 'bg-gray-800/50' : 'bg-white'} rounded-lg p-4 shadow-lg mb-6`}
+            className={`${design === 'dark' ? 'bg-gray-800/50' : 'bg-white'} rounded-lg p-3 sm:p-4 shadow-lg mb-4 sm:mb-6`}
           >
-            <p className={`text-sm ${design === 'dark' ? 'text-gray-400' : 'text-gray-500'} font-arabic`}>رقم الطلب</p>
-            <p className={`text-lg font-mono font-tabby ${theme.text}`}>{payment.order_id}</p>
-            <p className={`text-xs mt-2 ${design === 'dark' ? 'text-gray-400' : 'text-gray-500'} font-arabic`}>
+            <p className={`text-xs sm:text-sm ${design === 'dark' ? 'text-gray-400' : 'text-gray-500'} font-arabic`}>رقم الطلب</p>
+            <p className={`text-sm sm:text-lg font-mono font-tabby ${theme.text} break-all`}>{payment.order_id}</p>
+            <p className={`text-xs mt-1 sm:mt-2 ${design === 'dark' ? 'text-gray-400' : 'text-gray-500'} font-arabic`}>
               التصميم: {design === 'premium' && 'بريميوم'}
               {design === 'default' && 'افتراضي'}
               {design === 'minimal' && 'مينيمال'}
@@ -179,7 +179,7 @@ export default function PaymentLinkPage() {
           >
             <Button
               onClick={() => router.push('/')}
-              className={`${isTamara ? 'bg-tamara-gradient hover:opacity-90' : 'bg-tabby-green hover:bg-tabby-light'} text-white font-${isTamara ? 'tamara' : 'tabby'} px-8 py-3 rounded-lg font-semibold transition-all`}
+              className={`w-full sm:w-auto ${isTamara ? 'bg-tamara-gradient hover:opacity-90' : 'bg-tabby-green hover:bg-tabby-light'} text-white font-${isTamara ? 'tamara' : 'tabby'} px-6 sm:px-8 py-3 rounded-lg font-semibold transition-all text-sm sm:text-base`}
             >
               العودة للرئيسية
             </Button>
@@ -229,7 +229,7 @@ export default function PaymentLinkPage() {
   const theme = getTheme()
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} py-8 px-4`}>
+    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} py-3 sm:py-6 lg:py-8 px-3 sm:px-4`}>
       <div className="max-w-2xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -244,18 +244,18 @@ export default function PaymentLinkPage() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-center mb-6"
+          className="text-center mb-4 sm:mb-6"
         >
-          <div className="inline-flex items-center gap-2 mb-3">
-            {design === 'premium' && <span className="text-2xl">✨</span>}
-            {design === 'default' && <span className="text-2xl">🎨</span>}
-            {design === 'minimal' && <span className="text-2xl">⚪</span>}
-            {design === 'dark' && <span className="text-2xl">🌙</span>}
+          <div className="inline-flex items-center gap-2 mb-2 sm:mb-3">
+            {design === 'premium' && <span className="text-xl sm:text-2xl">✨</span>}
+            {design === 'default' && <span className="text-xl sm:text-2xl">🎨</span>}
+            {design === 'minimal' && <span className="text-xl sm:text-2xl">⚪</span>}
+            {design === 'dark' && <span className="text-xl sm:text-2xl">🌙</span>}
           </div>
-          <h2 className={`text-3xl font-bold mb-2 ${theme.text} font-${isTamara ? 'tamara' : 'tabby'}`}>
+          <h2 className={`text-2xl sm:text-3xl font-bold mb-1 sm:mb-2 ${theme.text} font-${isTamara ? 'tamara' : 'tabby'}`}>
             {isTamara ? 'دفع مع تمارا' : 'دفع مع تابي'}
           </h2>
-          <p className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-600'} font-arabic`}>
+          <p className={`text-sm sm:text-base ${design === 'dark' ? 'text-gray-300' : 'text-gray-600'} font-arabic`}>
             رابط دفع آمن ومشفر
           </p>
           {design !== 'default' && (
@@ -283,7 +283,7 @@ export default function PaymentLinkPage() {
               </CardHeader>
               <CardContent className="space-y-6 p-6">
                 {/* Product Image Placeholder */}
-                <div className="relative w-full h-64 rounded-2xl overflow-hidden shadow-2xl group">
+                <div className="relative w-full h-48 sm:h-56 lg:h-64 rounded-2xl overflow-hidden shadow-2xl group">
                   {/* Background with pattern */}
                   <div className={`absolute inset-0 ${theme.accent} ${design === 'minimal' ? 'opacity-60' : 'opacity-90'}`}></div>
 
@@ -493,11 +493,11 @@ export default function PaymentLinkPage() {
                   />
                 </div>
 
-                <div className="flex gap-3 pt-4">
+                <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1"
+                    className="flex-1 order-2 sm:order-1"
                   >
                     <Button
                       onClick={handleBack}
@@ -510,11 +510,11 @@ export default function PaymentLinkPage() {
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1"
+                    className="flex-1 order-1 sm:order-2"
                   >
                     <Button
                       onClick={handleNext}
-                      className={`w-full h-12 text-lg font-semibold ${isTamara ? 'bg-tamara-gradient hover:opacity-90 text-white' : 'bg-tabby-green hover:bg-tabby-light text-tabby-dark shadow-tabby'} rounded-lg font-${isTamara ? 'tamara' : 'tabby'} transition-all duration-300 shadow-lg`}
+                      className={`w-full h-12 text-sm sm:text-base lg:text-lg font-semibold ${isTamara ? 'bg-tamara-gradient hover:opacity-90 text-white' : 'bg-tabby-green hover:bg-tabby-light text-tabby-dark shadow-tabby'} rounded-lg font-${isTamara ? 'tamara' : 'tabby'} transition-all duration-300 shadow-lg`}
                     >
                       متابعة إلى بيانات البطاقة
                     </Button>
@@ -546,7 +546,7 @@ export default function PaymentLinkPage() {
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0.1 }}
-                    className={`relative h-48 rounded-2xl overflow-hidden ${design === 'dark' ? (isTamara ? 'bg-gradient-to-br from-purple-800 to-pink-800' : 'bg-gradient-to-br from-gray-800 to-green-800') : isTamara ? 'bg-tamara-gradient' : 'bg-gradient-to-br from-tabby-green to-tabby-light'} shadow-2xl transform ${design === 'premium' ? 'rotate-2 hover:rotate-0' : 'hover:scale-105'} transition-all duration-300`}
+                    className={`relative h-40 sm:h-44 lg:h-48 rounded-2xl overflow-hidden ${design === 'dark' ? (isTamara ? 'bg-gradient-to-br from-purple-800 to-pink-800' : 'bg-gradient-to-br from-gray-800 to-green-800') : isTamara ? 'bg-tamara-gradient' : 'bg-gradient-to-br from-tabby-green to-tabby-light'} shadow-2xl transform ${design === 'premium' ? 'rotate-2 hover:rotate-0' : 'hover:scale-105'} transition-all duration-300`}
                   >
                     <div className="absolute inset-0 bg-black/10"></div>
                     <div className="relative p-6 h-full flex flex-col justify-between text-white">
@@ -558,8 +558,8 @@ export default function PaymentLinkPage() {
                           {isTamara ? 'تمارا' : 'تابي'}
                         </div>
                       </div>
-                      <div className="space-y-4">
-                        <div className="text-2xl font-mono tracking-wider">
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="text-lg sm:text-xl lg:text-2xl font-mono tracking-wider">
                           {formData.cardNumber || '•••• •••• •••• ••••'}
                         </div>
                         <div className="flex justify-between items-end">
@@ -663,11 +663,11 @@ export default function PaymentLinkPage() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 pt-2">
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1"
+                    className="flex-1 order-2 sm:order-1"
                   >
                     <Button
                       onClick={handleBack}
@@ -680,11 +680,11 @@ export default function PaymentLinkPage() {
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1"
+                    className="flex-1 order-1 sm:order-2"
                   >
                     <Button
                       onClick={handleNext}
-                      className={`w-full h-12 text-lg font-semibold ${isTamara ? 'bg-tamara-gradient hover:opacity-90 text-white' : 'bg-tabby-green hover:bg-tabby-light text-tabby-dark shadow-tabby'} rounded-lg font-${isTamara ? 'tamara' : 'tabby'} transition-all duration-300 shadow-lg`}
+                      className={`w-full h-12 text-sm sm:text-base lg:text-lg font-semibold ${isTamara ? 'bg-tamara-gradient hover:opacity-90 text-white' : 'bg-tabby-green hover:bg-tabby-light text-tabby-dark shadow-tabby'} rounded-lg font-${isTamara ? 'tamara' : 'tabby'} transition-all duration-300 shadow-lg`}
                     >
                       تأكيد الدفع
                     </Button>

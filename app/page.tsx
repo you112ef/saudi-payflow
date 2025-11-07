@@ -74,26 +74,26 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="text-center mb-6 sm:mb-12"
         >
-          <h1 className="text-4xl font-bold text-gray-900 mb-4 font-tamara">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-4 font-tamara">
             SaudiPayFlow
           </h1>
-          <p className="text-lg text-gray-600 font-arabic">
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600 font-arabic px-2">
             إنشاء روابط دفع منفصلة لتمارا وتابي
           </p>
         </motion.div>
 
-        <Card className="mb-8 shadow-xl">
+        <Card className="mb-6 sm:mb-8 shadow-xl">
           <CardHeader>
-            <CardTitle className="text-2xl font-tamara">إنشاء رابط دفع جديد</CardTitle>
-            <CardDescription className="font-arabic">
+            <CardTitle className="text-xl sm:text-2xl font-tamara">إنشاء رابط دفع جديد</CardTitle>
+            <CardDescription className="text-sm sm:text-base font-arabic">
               املأ بيانات المنتج لإنشاء رابط دفع قابل للمشاركة
             </CardDescription>
           </CardHeader>
@@ -155,7 +155,7 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -163,8 +163,8 @@ export default function Home() {
           >
             <Card className="h-full shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-tamara/5 to-tamara-light/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="text-center pb-4 relative">
-                <div className="mx-auto w-32 h-32 bg-tamara-gradient rounded-2xl flex items-center justify-center mb-4 shadow-2xl transform group-hover:scale-110 transition-transform duration-500 relative overflow-hidden">
+              <CardHeader className="text-center pb-3 sm:pb-4 relative">
+                <div className="mx-auto w-24 h-24 sm:w-32 sm:h-32 bg-tamara-gradient rounded-2xl flex items-center justify-center mb-3 sm:mb-4 shadow-2xl transform group-hover:scale-110 transition-transform duration-500 relative overflow-hidden">
                   {/* Animated background pattern */}
                   <div className="absolute inset-0 opacity-20">
                     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -176,9 +176,9 @@ export default function Home() {
                       <rect width="100%" height="100%" fill="url(#tamara-pattern)" />
                     </svg>
                   </div>
-                  <div className="text-4xl font-bold text-white font-tamara relative z-10">تمارا</div>
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-tamara relative z-10">تمارا</div>
                 </div>
-                <CardTitle className="font-tamara text-2xl text-tamara-dark">دفع مع تمارا</CardTitle>
+                <CardTitle className="font-tamara text-xl sm:text-2xl text-tamara-dark">دفع مع تمارا</CardTitle>
                 <CardDescription className="font-arabic text-gray-600">
                   ادفع لاحقاً أو بأقساط مريحة
                 </CardDescription>
@@ -218,8 +218,8 @@ export default function Home() {
           >
             <Card className="h-full shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-tabby/5 to-tabby-light/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardHeader className="text-center pb-4 relative">
-                <div className="mx-auto w-32 h-32 bg-tabby-green rounded-full flex items-center justify-center mb-4 shadow-tabby transform group-hover:scale-110 transition-transform duration-500 relative overflow-hidden">
+              <CardHeader className="text-center pb-3 sm:pb-4 relative">
+                <div className="mx-auto w-24 h-24 sm:w-32 sm:h-32 bg-tabby-green rounded-full flex items-center justify-center mb-3 sm:mb-4 shadow-tabby transform group-hover:scale-110 transition-transform duration-500 relative overflow-hidden">
                   {/* Animated background pattern */}
                   <div className="absolute inset-0 opacity-20">
                     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -232,9 +232,9 @@ export default function Home() {
                       <rect width="100%" height="100%" fill="url(#tabby-pattern)" />
                     </svg>
                   </div>
-                  <div className="text-4xl font-bold text-tabby-dark font-tabby relative z-10">تابي</div>
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-tabby-dark font-tabby relative z-10">تابي</div>
                 </div>
-                <CardTitle className="font-tabby text-2xl text-tabby-dark">دفع مع تابي</CardTitle>
+                <CardTitle className="font-tabby text-xl sm:text-2xl text-tabby-dark">دفع مع تابي</CardTitle>
                 <CardDescription className="font-arabic text-gray-600">
                   اشتري الآن وادفع لاحقاً
                 </CardDescription>
@@ -274,13 +274,13 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <Card className="shadow-lg">
+            <Card className="mb-6 sm:mb-8 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <LinkIcon className="w-5 h-5" />
+                <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+                  <LinkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                   الروابط الحديثة
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-sm sm:text-base">
                   آخر 5 روابط دفع تم إنشاؤها
                 </CardDescription>
               </CardHeader>
@@ -289,12 +289,12 @@ export default function Home() {
                   {recentLinks.map((link) => (
                     <div
                       key={link.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                     >
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <span
-                            className={`px-2 py-1 rounded text-xs font-semibold ${
+                            className={`px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${
                               link.provider === 'tamara'
                                 ? 'bg-tamara/10 text-tamara'
                                 : 'bg-tabby/10 text-tabby'
@@ -302,17 +302,17 @@ export default function Home() {
                           >
                             {link.provider === 'tamara' ? 'تمارا' : 'تابي'}
                           </span>
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-gray-600 whitespace-nowrap">
                             {link.amount} {link.currency}
                           </span>
                         </div>
-                        <p className="text-sm font-mono text-gray-800 break-all">
+                        <p className="text-xs sm:text-sm font-mono text-gray-800 break-all">
                           {link.payment_url}
                         </p>
                       </div>
                       <button
                         onClick={() => copyToClipboard(link.payment_url, link.id)}
-                        className="p-2 hover:bg-white rounded-lg transition-colors"
+                        className="p-2 hover:bg-white rounded-lg transition-colors self-end sm:self-center flex-shrink-0"
                         title="نسخ الرابط"
                       >
                         {copied === link.id ? (
@@ -333,11 +333,11 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="text-center mt-8"
+          className="text-center mt-6 sm:mt-8 pb-4"
         >
           <a
             href="/admin"
-            className="text-sm text-gray-500 hover:text-gray-700 underline"
+            className="text-xs sm:text-sm text-gray-500 hover:text-gray-700 underline"
           >
             لوحة الإدارة
           </a>

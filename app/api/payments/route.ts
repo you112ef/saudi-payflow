@@ -5,7 +5,7 @@ import { serverStorage } from '@/lib/storage'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { provider, amount, currency, customer_name, customer_email, customer_phone, customer_address, order_id } = body
+    const { provider, amount, currency, customer_name, customer_email, customer_phone, customer_address, order_id, design } = body
 
     if (!provider || !amount || !currency) {
       return NextResponse.json(
@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
       customer_phone,
       customer_address,
       order_id: finalOrderId,
+      design: design || 'premium',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       payment_url: paymentLink

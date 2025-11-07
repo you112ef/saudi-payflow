@@ -15,6 +15,7 @@ export default function Home() {
   const [productDescription, setProductDescription] = useState('')
   const [recentLinks, setRecentLinks] = useState<any[]>([])
   const [copied, setCopied] = useState<string | null>(null)
+  const [selectedDesign, setSelectedDesign] = useState<'default' | 'minimal' | 'premium' | 'dark'>('premium')
 
   useEffect(() => {
     // Load recent links from localStorage
@@ -39,6 +40,7 @@ export default function Home() {
           currency: 'SAR',
           customer_name: productName,
           order_id: `${provider.toUpperCase()}_${Date.now()}`,
+          design: selectedDesign,
         }),
       })
 
@@ -52,7 +54,7 @@ export default function Home() {
         setRecentLinks(clientStorage.getPayments().slice(0, 5))
 
         // Show success with link
-        alert(`تم إنشاء الرابط بنجاح!\n\nالرابط: ${data.data.payment_url}`)
+        alert(`تم إنشاء الرابط بنجاح!\n\nالرابط: ${data.data.payment_url}\n\nالتصميم: ${selectedDesign}`)
 
         // Reset form
         setAmount('')
@@ -125,6 +127,30 @@ export default function Home() {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label>اختر تصميم رابط الدفع</Label>
+              <div className="relative">
+                <select
+                  value={selectedDesign}
+                  onChange={(e) => setSelectedDesign(e.target.value as any)}
+                  className="w-full h-12 px-4 rounded-lg border border-gray-300 focus:border-tamara focus:ring-2 focus:ring-tamara/20 bg-white appearance-none cursor-pointer font-arabic"
+                >
+                  <option value="premium" className="font-arabic">✨ ثيم بريميوم - ألوان متدرجة متقدمة</option>
+                  <option value="default" className="font-arabic">🎨 ثيم افتراضي - تصميم نظيف وبسيط</option>
+                  <option value="minimal" className="font-arabic">⚪ ثيم مينيمال - أقل قدر من التفاصيل</option>
+                  <option value="dark" className="font-arabic">🌙 ثيم داكن - للاستخدام الليلي</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 font-arabic">
+                سيتم تطبيق التصميم المحدد على رابط الدفع
+              </p>
             </div>
           </CardContent>
         </Card>

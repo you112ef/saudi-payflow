@@ -107,7 +107,7 @@ export default function PaymentLinkPage() {
 
   if (step === 'success') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center py-8 px-4">
+      <div className={`min-h-screen bg-gradient-to-br ${design === 'dark' ? 'from-gray-900 to-green-900' : design === 'minimal' ? 'from-green-50 to-green-100' : 'from-green-50 to-green-100'} flex items-center justify-center py-8 px-4`}>
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -120,17 +120,32 @@ export default function PaymentLinkPage() {
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <div className="w-32 h-32 mx-auto mb-6 relative">
-              <div className={`absolute inset-0 ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-green'} rounded-full opacity-20 animate-ping`}></div>
-              <div className={`relative w-full h-full ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-green'} rounded-full flex items-center justify-center shadow-2xl`}>
-                <CheckCircle2 className="w-16 h-16 text-white" />
-              </div>
+              {design === 'dark' ? (
+                <>
+                  <div className={`absolute inset-0 ${isTamara ? 'from-purple-600 to-pink-600' : 'from-green-400 to-green-600'} rounded-full opacity-30 animate-pulse`}></div>
+                  <div className={`relative w-full h-full ${isTamara ? 'from-purple-600 to-pink-600' : 'from-green-400 to-green-600'} rounded-full flex items-center justify-center shadow-2xl`}>
+                    <CheckCircle2 className="w-16 h-16 text-white" />
+                  </div>
+                </>
+              ) : design === 'minimal' ? (
+                <div className="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+                  <CheckCircle2 className={`w-20 h-20 ${isTamara ? 'text-tamara' : 'text-tabby-green'}`} />
+                </div>
+              ) : (
+                <>
+                  <div className={`absolute inset-0 ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-green'} rounded-full opacity-20 animate-ping`}></div>
+                  <div className={`relative w-full h-full ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-green'} rounded-full flex items-center justify-center shadow-2xl`}>
+                    <CheckCircle2 className="w-16 h-16 text-white" />
+                  </div>
+                </>
+              )}
             </div>
           </motion.div>
           <motion.h1
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className={`text-4xl font-bold mb-2 ${isTamara ? 'text-tamara-dark' : 'text-tabby-dark'} font-${isTamara ? 'tamara' : 'tabby'}`}
+            className={`text-4xl font-bold mb-2 ${theme.text} font-${isTamara ? 'tamara' : 'tabby'}`}
           >
             تم الدفع بنجاح! 🎉
           </motion.h1>
@@ -138,7 +153,7 @@ export default function PaymentLinkPage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-lg text-gray-600 mb-6 font-arabic"
+            className={`text-lg ${design === 'dark' ? 'text-gray-300' : 'text-gray-600'} mb-6 font-arabic`}
           >
             شكراً لك على ثقتك
           </motion.p>
@@ -146,10 +161,16 @@ export default function PaymentLinkPage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="bg-white rounded-lg p-4 shadow-lg mb-6"
+            className={`${design === 'dark' ? 'bg-gray-800/50' : 'bg-white'} rounded-lg p-4 shadow-lg mb-6`}
           >
-            <p className="text-sm text-gray-500 font-arabic">رقم الطلب</p>
-            <p className="text-lg font-mono font-tabby">{payment.order_id}</p>
+            <p className={`text-sm ${design === 'dark' ? 'text-gray-400' : 'text-gray-500'} font-arabic`}>رقم الطلب</p>
+            <p className={`text-lg font-mono font-tabby ${theme.text}`}>{payment.order_id}</p>
+            <p className={`text-xs mt-2 ${design === 'dark' ? 'text-gray-400' : 'text-gray-500'} font-arabic`}>
+              التصميم: {design === 'premium' && 'بريميوم'}
+              {design === 'default' && 'افتراضي'}
+              {design === 'minimal' && 'مينيمال'}
+              {design === 'dark' && 'داكن'}
+            </p>
           </motion.div>
           <motion.div
             initial={{ y: 20, opacity: 0 }}
@@ -170,9 +191,45 @@ export default function PaymentLinkPage() {
 
   const isTamara = payment.provider === 'tamara'
   const Logo = isTamara ? TamaraLogo : TabbyLogo
+  const design = payment.design || 'premium'
+
+  // Get theme based on design and provider
+  const getTheme = () => {
+    if (design === 'dark') {
+      return {
+        bg: 'from-gray-900 to-gray-800',
+        card: 'bg-gray-800/50',
+        text: 'text-white',
+        accent: isTamara ? 'from-purple-600 to-pink-600' : 'from-green-400 to-green-600',
+      }
+    } else if (design === 'minimal') {
+      return {
+        bg: 'from-gray-50 to-gray-100',
+        card: 'bg-white',
+        text: 'text-gray-900',
+        accent: isTamara ? 'from-purple-500 to-pink-500' : 'from-green-500 to-green-700',
+      }
+    } else if (design === 'default') {
+      return {
+        bg: isTamara ? 'from-purple-50 via-white to-pink-50' : 'from-green-50 via-white to-blue-50',
+        card: 'bg-white',
+        text: 'text-gray-900',
+        accent: isTamara ? 'bg-tamara-gradient' : 'bg-tabby-green',
+      }
+    } else {
+      return {
+        bg: isTamara ? 'from-purple-50 via-white to-pink-50' : 'from-green-50 via-white to-blue-50',
+        card: 'bg-white',
+        text: 'text-gray-900',
+        accent: isTamara ? 'bg-tamara-gradient' : 'bg-tabby-green',
+      }
+    }
+  }
+
+  const theme = getTheme()
 
   return (
-    <div className={`min-h-screen ${isTamara ? 'bg-gradient-to-br from-purple-50 via-white to-pink-50' : 'bg-gradient-to-br from-green-50 via-white to-blue-50'} py-8 px-4`}>
+    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} py-8 px-4`}>
       <div className="max-w-2xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -189,10 +246,25 @@ export default function PaymentLinkPage() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-center mb-6"
         >
-          <h2 className={`text-3xl font-bold mb-2 ${isTamara ? 'text-tamara-dark' : 'text-tabby-dark'} font-${isTamara ? 'tamara' : 'tabby'}`}>
+          <div className="inline-flex items-center gap-2 mb-3">
+            {design === 'premium' && <span className="text-2xl">✨</span>}
+            {design === 'default' && <span className="text-2xl">🎨</span>}
+            {design === 'minimal' && <span className="text-2xl">⚪</span>}
+            {design === 'dark' && <span className="text-2xl">🌙</span>}
+          </div>
+          <h2 className={`text-3xl font-bold mb-2 ${theme.text} font-${isTamara ? 'tamara' : 'tabby'}`}>
             {isTamara ? 'دفع مع تمارا' : 'دفع مع تابي'}
           </h2>
-          <p className="text-gray-600 font-arabic">رابط دفع آمن ومشفر</p>
+          <p className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-600'} font-arabic`}>
+            رابط دفع آمن ومشفر
+          </p>
+          {design !== 'default' && (
+            <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold ${theme.text} bg-opacity-10`}>
+              {design === 'premium' && 'ثيم بريميوم'}
+              {design === 'minimal' && 'ثيم مينيمال'}
+              {design === 'dark' && 'ثيم داكن'}
+            </span>
+          )}
         </motion.div>
 
         {step === 'details' && (
@@ -201,10 +273,10 @@ export default function PaymentLinkPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Card className="shadow-2xl border-0 overflow-hidden">
-              <div className={`h-2 ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-gradient'}`}></div>
-              <CardHeader className="bg-white">
-                <CardTitle className={`flex items-center gap-2 text-xl ${isTamara ? 'text-tamara-dark' : 'text-tabby-dark'} font-${isTamara ? 'tamara' : 'tabby'}`}>
+            <Card className={`${design === 'dark' ? 'shadow-2xl bg-gray-800/50 backdrop-blur-sm' : 'shadow-2xl border-0'} overflow-hidden`}>
+              <div className={`h-2 ${theme.accent}`}></div>
+              <CardHeader className={design === 'dark' ? 'bg-gray-800/30' : 'bg-white'}>
+                <CardTitle className={`flex items-center gap-2 text-xl ${theme.text} font-${isTamara ? 'tamara' : 'tabby'}`}>
                   <CreditCard className={`w-5 h-5 ${isTamara ? 'text-tamara' : 'text-tabby-green'}`} />
                   تفاصيل الطلب
                 </CardTitle>
@@ -213,47 +285,55 @@ export default function PaymentLinkPage() {
                 {/* Product Image Placeholder */}
                 <div className="relative w-full h-64 rounded-2xl overflow-hidden shadow-2xl group">
                   {/* Background with pattern */}
-                  <div className={`absolute inset-0 ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-gradient'} opacity-90`}></div>
+                  <div className={`absolute inset-0 ${theme.accent} ${design === 'minimal' ? 'opacity-60' : 'opacity-90'}`}></div>
 
-                  {/* Pattern overlay */}
-                  <div className="absolute inset-0 opacity-10">
-                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                      <defs>
-                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
-                        </pattern>
-                      </defs>
-                      <rect width="100%" height="100%" fill="url(#grid)" />
-                    </svg>
-                  </div>
+                  {/* Pattern overlay - only for premium and default */}
+                  {design !== 'minimal' && (
+                    <div className="absolute inset-0 opacity-10">
+                      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
+                          </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                      </svg>
+                    </div>
+                  )}
 
                   {/* Content */}
                   <div className="relative h-full flex items-center justify-center">
                     <div className="text-center text-white">
-                      <motion.div
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="mb-4"
-                      >
-                        {isTamara ? (
-                          <svg className="w-24 h-24 mx-auto opacity-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="50" r="45" fill="white" opacity="20"/>
-                            <path d="M30 50h40M30 40h40M30 60h40" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.6"/>
-                            <circle cx="35" cy="50" r="3" fill="white"/>
-                            <circle cx="50" cy="50" r="3" fill="white"/>
-                            <circle cx="65" cy="50" r="3" fill="white"/>
-                          </svg>
-                        ) : (
-                          <svg className="w-24 h-24 mx-auto opacity-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="25" y="35" width="50" height="35" rx="5" fill="white" opacity="20"/>
-                            <rect x="30" y="45" width="40" height="3" fill="white" opacity="0.6"/>
-                            <rect x="30" y="52" width="30" height="3" fill="white" opacity="0.6"/>
-                            <rect x="30" y="59" width="25" height="3" fill="white" opacity="0.6"/>
-                            <circle cx="50" cy="30" r="8" fill="white" opacity="30"/>
-                          </svg>
-                        )}
-                      </motion.div>
+                      {design === 'minimal' ? (
+                        <div className="w-16 h-16 mx-auto mb-4 border-2 border-white rounded-full flex items-center justify-center">
+                          <CreditCard className="w-8 h-8" />
+                        </div>
+                      ) : (
+                        <motion.div
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ duration: 0.5, delay: 0.2 }}
+                          className="mb-4"
+                        >
+                          {isTamara ? (
+                            <svg className="w-24 h-24 mx-auto opacity-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="50" cy="50" r="45" fill="white" opacity="20"/>
+                              <path d="M30 50h40M30 40h40M30 60h40" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.6"/>
+                              <circle cx="35" cy="50" r="3" fill="white"/>
+                              <circle cx="50" cy="50" r="3" fill="white"/>
+                              <circle cx="65" cy="50" r="3" fill="white"/>
+                            </svg>
+                          ) : (
+                            <svg className="w-24 h-24 mx-auto opacity-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect x="25" y="35" width="50" height="35" rx="5" fill="white" opacity="20"/>
+                              <rect x="30" y="45" width="40" height="3" fill="white" opacity="0.6"/>
+                              <rect x="30" y="52" width="30" height="3" fill="white" opacity="0.6"/>
+                              <rect x="30" y="59" width="25" height="3" fill="white" opacity="0.6"/>
+                              <circle cx="50" cy="30" r="8" fill="white" opacity="30"/>
+                            </svg>
+                          )}
+                        </motion.div>
+                      )}
                       <motion.p
                         initial={{ y: 10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -273,43 +353,47 @@ export default function PaymentLinkPage() {
                     </div>
                   </div>
 
-                  {/* Floating elements */}
-                  <motion.div
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-4 right-4"
-                  >
-                    <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </motion.div>
+                  {/* Floating elements - only for premium */}
+                  {design === 'premium' && (
+                    <>
+                      <motion.div
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute top-4 right-4"
+                      >
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </motion.div>
 
-                  <motion.div
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    className="absolute bottom-4 left-4"
-                  >
-                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                        <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </motion.div>
+                      <motion.div
+                        animate={{ y: [0, 10, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                        className="absolute bottom-4 left-4"
+                      >
+                        <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                            <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
                 </div>
 
                 {/* Order Details */}
-                <div className={`p-6 ${isTamara ? 'bg-purple-50' : 'bg-green-50'} rounded-xl border ${isTamara ? 'border-tamara/20' : 'border-tabby/20'}`}>
+                <div className={`p-6 ${design === 'dark' ? 'bg-gray-700/50' : isTamara ? 'bg-purple-50' : 'bg-green-50'} rounded-xl border ${isTamara ? 'border-tamara/20' : 'border-tabby/20'}`}>
                   <div className="flex justify-between items-center mb-3">
-                    <span className="text-gray-700 font-arabic">المبلغ الإجمالي</span>
+                    <span className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-700'} font-arabic`}>المبلغ الإجمالي</span>
                     <span className={`text-3xl font-bold ${isTamara ? 'text-tamara' : 'text-tabby-dark'} font-${isTamara ? 'tamara' : 'tabby'}`}>
                       {payment.amount.toFixed(2)} {payment.currency}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 font-arabic">رقم الطلب</span>
+                    <span className={`${design === 'dark' ? 'text-gray-400' : 'text-gray-500'} font-arabic`}>رقم الطلب</span>
                     <span className="font-mono font-tabby text-tabby-dark">{payment.order_id}</span>
                   </div>
                 </div>
@@ -355,55 +439,55 @@ export default function PaymentLinkPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Card className="shadow-2xl border-0 overflow-hidden">
-              <div className={`h-2 ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-gradient'}`}></div>
-              <CardHeader className="bg-white">
-                <CardTitle className={`flex items-center gap-2 text-xl ${isTamara ? 'text-tamara-dark' : 'text-tabby-dark'} font-${isTamara ? 'tamara' : 'tabby'}`}>
+            <Card className={`${design === 'dark' ? 'shadow-2xl bg-gray-800/50 backdrop-blur-sm' : 'shadow-2xl border-0'} overflow-hidden`}>
+              <div className={`h-2 ${theme.accent}`}></div>
+              <CardHeader className={design === 'dark' ? 'bg-gray-800/30' : 'bg-white'}>
+                <CardTitle className={`flex items-center gap-2 text-xl ${theme.text} font-${isTamara ? 'tamara' : 'tabby'}`}>
                   <User className={`w-5 h-5 ${isTamara ? 'text-tamara' : 'text-tabby-green'}`} />
                   بيانات المستلم
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-5 p-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-gray-700 font-arabic font-semibold">الاسم الكامل</Label>
+                  <Label htmlFor="name" className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-700'} font-arabic font-semibold`}>الاسم الكامل</Label>
                   <Input
                     id="name"
                     placeholder="مثال: عبدالله أحمد"
-                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-arabic`}
+                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-arabic ${design === 'dark' ? 'bg-gray-700/50 text-white' : ''}`}
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-700 font-arabic font-semibold">البريد الإلكتروني</Label>
+                  <Label htmlFor="email" className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-700'} font-arabic font-semibold`}>البريد الإلكتروني</Label>
                   <Input
                     id="email"
                     type="email"
                     placeholder="example@email.com"
-                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-tabby`}
+                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-tabby ${design === 'dark' ? 'bg-gray-700/50 text-white' : ''}`}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-gray-700 font-arabic font-semibold">رقم الجوال</Label>
+                  <Label htmlFor="phone" className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-700'} font-arabic font-semibold`}>رقم الجوال</Label>
                   <Input
                     id="phone"
                     placeholder="+966 5X XXX XXXX"
-                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-tabby`}
+                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-tabby ${design === 'dark' ? 'bg-gray-700/50 text-white' : ''}`}
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="address" className="text-gray-700 font-arabic font-semibold">العنوان</Label>
+                  <Label htmlFor="address" className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-700'} font-arabic font-semibold`}>العنوان</Label>
                   <Input
                     id="address"
                     placeholder="المدينة، الحي، الشارع"
-                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-arabic`}
+                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-arabic ${design === 'dark' ? 'bg-gray-700/50 text-white' : ''}`}
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   />
@@ -447,68 +531,74 @@ export default function PaymentLinkPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Card className="shadow-2xl border-0 overflow-hidden">
-              <div className={`h-2 ${isTamara ? 'bg-tamara-gradient' : 'bg-tabby-gradient'}`}></div>
-              <CardHeader className="bg-white">
-                <CardTitle className={`flex items-center gap-2 text-xl ${isTamara ? 'text-tamara-dark' : 'text-tabby-dark'} font-${isTamara ? 'tamara' : 'tabby'}`}>
+            <Card className={`${design === 'dark' ? 'shadow-2xl bg-gray-800/50 backdrop-blur-sm' : 'shadow-2xl border-0'} overflow-hidden`}>
+              <div className={`h-2 ${theme.accent}`}></div>
+              <CardHeader className={design === 'dark' ? 'bg-gray-800/30' : 'bg-white'}>
+                <CardTitle className={`flex items-center gap-2 text-xl ${theme.text} font-${isTamara ? 'tamara' : 'tabby'}`}>
                   <CreditCard className={`w-5 h-5 ${isTamara ? 'text-tamara' : 'text-tabby-green'}`} />
                   بيانات البطاقة
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6 p-6">
                 {/* Credit Card Preview */}
-                <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className={`relative h-48 rounded-2xl overflow-hidden ${isTamara ? 'bg-tamara-gradient' : 'bg-gradient-to-br from-tabby-green to-tabby-light'} shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-300`}
-                >
-                  <div className="absolute inset-0 bg-black/10"></div>
-                  <div className="relative p-6 h-full flex flex-col justify-between text-white">
-                    <div className="flex justify-between items-start">
-                      <div className={`text-xs font-tabby opacity-90`}>
-                        {isTamara ? 'TAMARA' : 'TABBY'}
-                      </div>
-                      <div className={`text-xs font-${isTamara ? 'tamara' : 'tabby'} font-semibold`}>
-                        {isTamara ? 'تمارا' : 'تابي'}
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="text-2xl font-mono tracking-wider">
-                        {formData.cardNumber || '•••• •••• •••• ••••'}
-                      </div>
-                      <div className="flex justify-between items-end">
-                        <div>
-                          <div className="text-xs opacity-70 font-arabic">حامل البطاقة</div>
-                          <div className="text-sm font-tamara">
-                            {formData.name || 'الاسم الكامل'}
-                          </div>
+                {design !== 'minimal' ? (
+                  <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className={`relative h-48 rounded-2xl overflow-hidden ${design === 'dark' ? (isTamara ? 'bg-gradient-to-br from-purple-800 to-pink-800' : 'bg-gradient-to-br from-gray-800 to-green-800') : isTamara ? 'bg-tamara-gradient' : 'bg-gradient-to-br from-tabby-green to-tabby-light'} shadow-2xl transform ${design === 'premium' ? 'rotate-2 hover:rotate-0' : 'hover:scale-105'} transition-all duration-300`}
+                  >
+                    <div className="absolute inset-0 bg-black/10"></div>
+                    <div className="relative p-6 h-full flex flex-col justify-between text-white">
+                      <div className="flex justify-between items-start">
+                        <div className={`text-xs font-tabby opacity-90`}>
+                          {isTamara ? 'TAMARA' : 'TABBY'}
                         </div>
-                        <div>
-                          <div className="text-xs opacity-70 font-arabic">صالح حتى</div>
-                          <div className="text-sm font-mono">
-                            {formData.expiry || 'MM/YY'}
-                          </div>
+                        <div className={`text-xs font-${isTamara ? 'tamara' : 'tabby'} font-semibold`}>
+                          {isTamara ? 'تمارا' : 'تابي'}
                         </div>
                       </div>
+                      <div className="space-y-4">
+                        <div className="text-2xl font-mono tracking-wider">
+                          {formData.cardNumber || '•••• •••• •••• ••••'}
+                        </div>
+                        <div className="flex justify-between items-end">
+                          <div>
+                            <div className="text-xs opacity-70 font-arabic">حامل البطاقة</div>
+                            <div className="text-sm font-tamara">
+                              {formData.name || 'الاسم الكامل'}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-xs opacity-70 font-arabic">صالح حتى</div>
+                            <div className="text-sm font-mono">
+                              {formData.expiry || 'MM/YY'}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                    <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="18" fill="white" opacity="0.3"/>
+                        <path d="M12 20h16M16 16h8M16 24h8" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <div className={`h-32 rounded-xl border-2 ${isTamara ? 'border-tamara' : 'border-tabby-green'} flex items-center justify-center`}>
+                    <CreditCard className={`w-12 h-12 ${isTamara ? 'text-tamara' : 'text-tabby-green'}`} />
                   </div>
-                  <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="20" cy="20" r="18" fill="white" opacity="0.3"/>
-                      <path d="M12 20h16M16 16h8M16 24h8" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-                    </svg>
-                  </div>
-                </motion.div>
+                )}
 
                 {/* Card Number */}
                 <div className="space-y-2">
-                  <Label htmlFor="cardNumber" className="text-gray-700 font-arabic font-semibold">رقم البطاقة</Label>
+                  <Label htmlFor="cardNumber" className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-700'} font-arabic font-semibold`}>رقم البطاقة</Label>
                   <Input
                     id="cardNumber"
                     placeholder="1234 5678 9012 3456"
                     maxLength={19}
-                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-mono text-lg tracking-wider`}
+                    className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-mono text-lg tracking-wider ${design === 'dark' ? 'bg-gray-700/50 text-white' : ''}`}
                     value={formData.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ')}
                     onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value.replace(/\D/g, '') })}
                   />
@@ -517,12 +607,12 @@ export default function PaymentLinkPage() {
                 {/* Expiry and CVV */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="expiry" className="text-gray-700 font-arabic font-semibold">تاريخ الانتهاء</Label>
+                    <Label htmlFor="expiry" className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-700'} font-arabic font-semibold`}>تاريخ الانتهاء</Label>
                     <Input
                       id="expiry"
                       placeholder="MM/YY"
                       maxLength={5}
-                      className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-mono`}
+                      className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-mono ${design === 'dark' ? 'bg-gray-700/50 text-white' : ''}`}
                       value={formData.expiry}
                       onChange={(e) => {
                         let value = e.target.value.replace(/\D/g, '')
@@ -534,12 +624,12 @@ export default function PaymentLinkPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="cvv" className="text-gray-700 font-arabic font-semibold">CVV</Label>
+                    <Label htmlFor="cvv" className={`${design === 'dark' ? 'text-gray-300' : 'text-gray-700'} font-arabic font-semibold`}>CVV</Label>
                     <Input
                       id="cvv"
                       placeholder="123"
                       maxLength={3}
-                      className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-mono`}
+                      className={`h-12 ${isTamara ? 'border-tamara/30 focus:border-tamara' : 'border-tabby-gray focus:border-tabby-green'} font-mono ${design === 'dark' ? 'bg-gray-700/50 text-white' : ''}`}
                       value={formData.cvv}
                       onChange={(e) => setFormData({ ...formData, cvv: e.target.value.replace(/\D/g, '') })}
                     />
